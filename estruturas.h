@@ -1,3 +1,6 @@
+#ifndef ESTRUTURAS_H
+#define ESTRUTURAS_H
+
 #define INCREMENTO 5
 
 typedef struct {
@@ -21,3 +24,5 @@ typedef struct {
     char data[11];
     float valor;
 } Venda;
+
+#endif

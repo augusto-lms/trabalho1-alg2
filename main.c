@@ -1,19 +1,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "estruturas.h"
+#include "funcoes.h"
 #include "menus.h"
-
-void carregarDados(
-    Veiculo **veiculos, int *totalVeiculos, int *capacidadeVeiculos,
-    Cliente **clientes, int *totalClientes, int *capacidadeClientes,
-    Venda **vendas, int *totalVendas, int *capacidadeVendas
-);
-
-void salvarDados(
-    Veiculo *veiculos, int totalVeiculos,
-    Cliente *clientes, int totalClientes,
-    Venda *vendas, int totalVendas
-);
 
 int main() {
 

@@ -130,7 +130,7 @@ static void menuVeiculos(Veiculo **veiculos, int *total, int *capacidade) {
                 alterarVeiculo(*veiculos, *total);
                 break;
             case 4:
-                removerVeiculo(*veiculos, total);
+                removerVeiculo(veiculos, total, capacidade);
                 break;
             case 5:
                 listarVeiculos(*veiculos, *total);
@@ -170,7 +170,7 @@ static void menuClientes(Cliente **clientes, int *total, int *capacidade) {
                 alterarCliente(*clientes, *total);
                 break;
             case 4:
-                removerCliente(*clientes, total);
+                removerCliente(clientes, total, capacidade);
                 break;
             case 5:
                 listarClientes(*clientes, *total);

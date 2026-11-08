@@ -142,7 +142,7 @@ void alterarCliente(Cliente *clientes, int total)
     printf("Cliente nao encontrado.\n");
 }
 
-void removerCliente(Cliente *clientes, int *total)
+void removerCliente(Cliente **clientes, int *total, int *capacidade)
 {
     char cpfLido[15];
 
@@ -155,11 +155,27 @@ void removerCliente(Cliente *clientes, int *total)
 
     for (int i = 0; i < *total; i++)
     {
-        if (mesmoCPF(clientes[i].cpf, cpfLido))
+        if (mesmoCPF((*clientes)[i].cpf, cpfLido))
         {
+            if (*capacidade - (*total - 1) > INCREMENTO)
+            {
+                int novaCapacidade = *total - 1 + INCREMENTO;
+                Cliente *temporario = realloc(
+                    *clientes, novaCapacidade * sizeof(Cliente));
+
+                if (temporario == NULL)
+                {
+                    printf("Nao foi possivel ajustar a memoria. Remocao cancelada.\n");
+                    return;
+                }
+
+                *clientes = temporario;
+                *capacidade = novaCapacidade;
+            }
+
             for (int j = i; j < *total - 1; j++)
             {
-                clientes[j] = clientes[j + 1];
+                (*clientes)[j] = (*clientes)[j + 1];
             }
 
             (*total)--;

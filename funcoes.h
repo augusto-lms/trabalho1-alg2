@@ -11,13 +11,13 @@ int normalizarCPF(char *cpf);
 void cadastrarVeiculo(Veiculo **veiculos, int *total, int *capacidade);
 void consultarVeiculo(const Veiculo *veiculos, int total);
 void alterarVeiculo(Veiculo *veiculos, int total);
-void removerVeiculo(Veiculo *veiculos, int *total);
+void removerVeiculo(Veiculo **veiculos, int *total, int *capacidade);
 void listarVeiculos(const Veiculo *veiculos, int total);
 
 void cadastrarCliente(Cliente **clientes, int *total, int *capacidade);
 void consultarCliente(const Cliente *clientes, int total);
 void alterarCliente(Cliente *clientes, int total);
-void removerCliente(Cliente *clientes, int *total);
+void removerCliente(Cliente **clientes, int *total, int *capacidade);
 void listarClientes(const Cliente *clientes, int total);
 
 int carregarDados(

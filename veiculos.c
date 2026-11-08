@@ -101,7 +101,7 @@ void alterarVeiculo(Veiculo *veiculos, int total)
     printf("Veiculo nao encontrado.\n");
 }
 
-void removerVeiculo(Veiculo *veiculos, int *total)
+void removerVeiculo(Veiculo **veiculos, int *total, int *capacidade)
 {
     int codigolido;
 
@@ -114,11 +114,27 @@ void removerVeiculo(Veiculo *veiculos, int *total)
 
     for (int i = 0; i < *total; i++)
     {
-        if (veiculos[i].codigo == codigolido)
+        if ((*veiculos)[i].codigo == codigolido)
         {
+            if (*capacidade - (*total - 1) > INCREMENTO)
+            {
+                int novaCapacidade = *total - 1 + INCREMENTO;
+                Veiculo *temporario = realloc(
+                    *veiculos, novaCapacidade * sizeof(Veiculo));
+
+                if (temporario == NULL)
+                {
+                    printf("Nao foi possivel ajustar a memoria. Remocao cancelada.\n");
+                    return;
+                }
+
+                *veiculos = temporario;
+                *capacidade = novaCapacidade;
+            }
+
             for (int j = i; j < *total - 1; j++)
             {
-                veiculos[j] = veiculos[j + 1];
+                (*veiculos)[j] = (*veiculos)[j + 1];
             }
 
             (*total)--;

@@ -5,7 +5,6 @@
 #include "estruturas.h"
 #include "funcoes.h"
 
-/* Aceita 11 digitos ou o formato 000.000.000-00. */
 int normalizarCPF(char *cpf)
 {
     char digitos[12];
@@ -37,7 +36,6 @@ int normalizarCPF(char *cpf)
     return 1;
 }
 
-/* Compara tambem registros antigos que foram salvos com pontuacao. */
 static int mesmoCPF(const char *cpfSalvo, const char *cpfLido)
 {
     char copia[15];

@@ -7,7 +7,6 @@
 #include "funcoes.h"
 #include "menus.h"
 
-/* Le uma linha inteira e descarta o excesso se ela nao couber. */
 int lerTexto(char *texto, int tamanho)
 {
     int caractere;
@@ -50,7 +49,7 @@ int lerInteiro(int *numero)
     if (fim == texto || errno == ERANGE || valor < INT_MIN || valor > INT_MAX)
         return 0;
 
-    /* Permite espacos depois do numero, mas rejeita letras e outros simbolos. */
+
     while (isspace((unsigned char)*fim))
         fim++;
 

@@ -11,7 +11,7 @@
 #define ARQ_VEICULOS "veiculos.bin"
 #define ARQ_CLIENTES "clientes.bin"
 
-/* Confere o cabecalho e o tamanho antes de reservar memoria. */
+
 static int lerQuantidade(FILE *arquivo, size_t tamanhoRegistro, int *quantidade)
 {
     long tamanhoArquivo;
@@ -48,7 +48,7 @@ static int carregarVeiculos(Veiculo **dados, int *total, int *capacidade)
     if (arquivo == NULL)
     {
         if (errno == ENOENT)
-            return 1; /* Na primeira execucao, o arquivo ainda nao existe. */
+            return 1; 
 
         printf("Erro ao abrir veiculos.bin para leitura.\n");
         return 0;
@@ -121,7 +121,7 @@ static int carregarClientes(Cliente **dados, int *total, int *capacidade)
     if (arquivo == NULL)
     {
         if (errno == ENOENT)
-            return 1; /* Na primeira execucao, o arquivo ainda nao existe. */
+            return 1; 
 
         printf("Erro ao abrir clientes.bin para leitura.\n");
         return 0;
@@ -192,7 +192,6 @@ int carregarDados(
     Venda **vendas, int *totalVendas, int *capacidadeVendas
 )
 {
-    /* Vendas ainda nao foram implementadas. */
     (void)vendas;
     (void)totalVendas;
     (void)capacidadeVendas;
@@ -203,7 +202,6 @@ int carregarDados(
     return carregarClientes(clientes, totalClientes, capacidadeClientes);
 }
 
-/* Guarda o original enquanto o arquivo novo e colocado no lugar. */
 static int substituirArquivo(const char *nome, const char *novo, const char *backup)
 {
     FILE *arquivo;

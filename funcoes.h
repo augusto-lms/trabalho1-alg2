@@ -3,7 +3,6 @@
 
 #include "estruturas.h"
 
-/* Retornam 1 quando a leitura e valida e 0 quando e invalida. */
 int lerTexto(char *texto, int tamanho);
 int lerInteiro(int *numero);
 int lerReal(float *numero);

@@ -5,7 +5,9 @@
 #include "funcoes.h"
 #include "menus.h"
 
-int main() {
+int main(void) {
+
+    int salvou;
 
     Veiculo *veiculos = NULL;
     Cliente *clientes = NULL;
@@ -33,11 +35,17 @@ int main() {
         return 1;
     }
 
-    carregarDados(
+    if (!carregarDados(
         &veiculos, &totalVeiculos, &capacidadeVeiculos,
         &clientes, &totalClientes, &capacidadeClientes,
         &vendas, &totalVendas, &capacidadeVendas
-    );
+    )) {
+        printf("Falha na carga. Os arquivos originais nao serao sobrescritos.\n");
+        free(veiculos);
+        free(clientes);
+        free(vendas);
+        return 1;
+    }
 
     menuPrincipal(
         &veiculos, &totalVeiculos, &capacidadeVeiculos,
@@ -45,7 +53,7 @@ int main() {
         &vendas, &totalVendas, &capacidadeVendas
     );
 
-    salvarDados(
+    salvou = salvarDados(
         veiculos, totalVeiculos,
         clientes, totalClientes,
         vendas, totalVendas
@@ -57,5 +65,5 @@ int main() {
 
     printf("\nSistema encerrado.\n");
 
-    return 0;
+    return salvou ? 0 : 1;
 }

@@ -5,6 +5,49 @@
 #include "estruturas.h"
 #include "funcoes.h"
 
+/* Aceita 11 digitos ou o formato 000.000.000-00. */
+int normalizarCPF(char *cpf)
+{
+    char digitos[12];
+    int tamanho = strlen(cpf);
+    int j = 0;
+
+    if (tamanho != 11 && tamanho != 14)
+        return 0;
+
+    for (int i = 0; i < tamanho; i++)
+    {
+        if (tamanho == 14 && (i == 3 || i == 7 || i == 11))
+        {
+            if ((i == 11 && cpf[i] != '-') || (i != 11 && cpf[i] != '.'))
+                return 0;
+        }
+        else
+        {
+            if (cpf[i] < '0' || cpf[i] > '9')
+                return 0;
+
+            digitos[j] = cpf[i];
+            j++;
+        }
+    }
+
+    digitos[j] = '\0';
+    strcpy(cpf, digitos);
+    return 1;
+}
+
+/* Compara tambem registros antigos que foram salvos com pontuacao. */
+static int mesmoCPF(const char *cpfSalvo, const char *cpfLido)
+{
+    char copia[15];
+
+    memcpy(copia, cpfSalvo, sizeof(copia));
+    copia[14] = '\0';
+
+    return normalizarCPF(copia) && strcmp(copia, cpfLido) == 0;
+}
+
 void listarClientes(const Cliente *clientes, int total)
 {
     if (total == 0)
@@ -28,15 +71,15 @@ void consultarCliente(const Cliente *clientes, int total)
     char cpfLido[15];
 
     printf("Digite o CPF do cliente que quer consultar: ");
-    if (scanf(" %14s", cpfLido) != 1)
+    if (!lerTexto(cpfLido, sizeof(cpfLido)) || !normalizarCPF(cpfLido))
     {
-        printf("CPF invalido.\n");
+        printf("CPF invalido. Use 11 digitos ou o formato 000.000.000-00.\n");
         return;
     }
 
     for (int i = 0; i < total; i++)
     {
-        if (strcmp(clientes[i].cpf, cpfLido) == 0)
+        if (mesmoCPF(clientes[i].cpf, cpfLido))
         {
             printf("Cliente encontrado.\n");
             printf("CPF: %s\n", clientes[i].cpf);
@@ -56,36 +99,36 @@ void alterarCliente(Cliente *clientes, int total)
     Cliente novo;
 
     printf("Digite o CPF do cliente que quer alterar: ");
-    if (scanf(" %14s", cpfLido) != 1)
+    if (!lerTexto(cpfLido, sizeof(cpfLido)) || !normalizarCPF(cpfLido))
     {
-        printf("CPF invalido.\n");
+        printf("CPF invalido. Use 11 digitos ou o formato 000.000.000-00.\n");
         return;
     }
 
     for (int i = 0; i < total; i++)
     {
-        if (strcmp(clientes[i].cpf, cpfLido) == 0)
+        if (mesmoCPF(clientes[i].cpf, cpfLido))
         {
             printf("Cliente encontrado.\n");
 
             novo = clientes[i];
 
             printf("Digite o novo nome: ");
-            if (scanf(" %99[^\n]", novo.nome) != 1)
+            if (!lerTexto(novo.nome, sizeof(novo.nome)))
             {
                 printf("Nome invalido.\n");
                 return;
             }
 
             printf("Digite o novo telefone: ");
-            if (scanf(" %19s", novo.telefone) != 1)
+            if (!lerTexto(novo.telefone, sizeof(novo.telefone)))
             {
                 printf("Telefone invalido.\n");
                 return;
             }
 
             printf("Digite o novo email: ");
-            if (scanf(" %99s", novo.email) != 1)
+            if (!lerTexto(novo.email, sizeof(novo.email)))
             {
                 printf("Email invalido.\n");
                 return;
@@ -106,15 +149,15 @@ void removerCliente(Cliente *clientes, int *total)
     char cpfLido[15];
 
     printf("Digite o CPF do cliente que quer remover: ");
-    if (scanf(" %14s", cpfLido) != 1)
+    if (!lerTexto(cpfLido, sizeof(cpfLido)) || !normalizarCPF(cpfLido))
     {
-        printf("CPF invalido.\n");
+        printf("CPF invalido. Use 11 digitos ou o formato 000.000.000-00.\n");
         return;
     }
 
     for (int i = 0; i < *total; i++)
     {
-        if (strcmp(clientes[i].cpf, cpfLido) == 0)
+        if (mesmoCPF(clientes[i].cpf, cpfLido))
         {
             for (int j = i; j < *total - 1; j++)
             {
@@ -136,15 +179,15 @@ void cadastrarCliente(Cliente **clientes, int *total, int *capacidade)
     char cpfLido[15];
 
     printf("Digite o CPF do cliente: ");
-    if (scanf(" %14s", cpfLido) != 1)
+    if (!lerTexto(cpfLido, sizeof(cpfLido)) || !normalizarCPF(cpfLido))
     {
-        printf("CPF invalido.\n");
+        printf("CPF invalido. Use 11 digitos ou o formato 000.000.000-00.\n");
         return;
     }
 
     for (int i = 0; i < *total; i++)
     {
-        if (strcmp((*clientes)[i].cpf, cpfLido) == 0)
+        if (mesmoCPF((*clientes)[i].cpf, cpfLido))
         {
             printf("Ja existe um cliente com esse CPF.\n");
             return;
@@ -155,21 +198,21 @@ void cadastrarCliente(Cliente **clientes, int *total, int *capacidade)
     strcpy(novo.cpf, cpfLido);
 
     printf("Digite o nome: ");
-    if (scanf(" %99[^\n]", novo.nome) != 1)
+    if (!lerTexto(novo.nome, sizeof(novo.nome)))
     {
         printf("Nome invalido.\n");
         return;
     }
 
     printf("Digite o telefone: ");
-    if (scanf(" %19s", novo.telefone) != 1)
+    if (!lerTexto(novo.telefone, sizeof(novo.telefone)))
     {
         printf("Telefone invalido.\n");
         return;
     }
 
     printf("Digite o email: ");
-    if (scanf(" %99s", novo.email) != 1)
+    if (!lerTexto(novo.email, sizeof(novo.email)))
     {
         printf("Email invalido.\n");
         return;

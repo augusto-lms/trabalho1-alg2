@@ -1,35 +1,107 @@
 #include <ctype.h>
+#include <errno.h>
+#include <limits.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcoes.h"
 #include "menus.h"
 
-static int lerOpcao(void) {
-    char linha[64];
+/* Le uma linha inteira e descarta o excesso se ela nao couber. */
+int lerTexto(char *texto, int tamanho)
+{
+    int caractere;
+    int i = 0;
+    int excesso = 0;
+    int temTexto = 0;
+
+    while ((caractere = getchar()) != '\n' && caractere != EOF)
+    {
+        if (i < tamanho - 1)
+        {
+            texto[i] = (char)caractere;
+            i++;
+        }
+        else
+        {
+            excesso = 1;
+        }
+
+        if (!isspace((unsigned char)caractere))
+            temTexto = 1;
+    }
+
+    texto[i] = '\0';
+    return !excesso && temTexto;
+}
+
+int lerInteiro(int *numero)
+{
+    char texto[64];
     char *fim;
     long valor;
-    size_t i;
 
-    if (fgets(linha, sizeof(linha), stdin) == NULL) {
+    if (!lerTexto(texto, sizeof(texto)))
         return 0;
-    }
 
-    valor = strtol(linha, &fim, 10);
-    if (fim == linha) {
+    errno = 0;
+    valor = strtol(texto, &fim, 10);
+
+    if (fim == texto || errno == ERANGE || valor < INT_MIN || valor > INT_MAX)
+        return 0;
+
+    /* Permite espacos depois do numero, mas rejeita letras e outros simbolos. */
+    while (isspace((unsigned char)*fim))
+        fim++;
+
+    if (*fim != '\0')
+        return 0;
+
+    *numero = (int)valor;
+    return 1;
+}
+
+int lerReal(float *numero)
+{
+    char texto[64];
+    char *fim;
+    float valor;
+
+    if (!lerTexto(texto, sizeof(texto)))
+        return 0;
+
+    errno = 0;
+    valor = strtof(texto, &fim);
+
+    if (fim == texto || errno == ERANGE || !isfinite(valor))
+        return 0;
+
+    while (isspace((unsigned char)*fim))
+        fim++;
+
+    if (*fim != '\0')
+        return 0;
+
+    *numero = valor;
+    return 1;
+}
+
+static int lerOpcao(void)
+{
+    int opcao;
+
+    if (!lerInteiro(&opcao))
+    {
+        if (feof(stdin))
+            return 0;
+
         return -1;
     }
 
-    for (i = (size_t)(fim - linha); linha[i] != '\0'; i++) {
-        if (!isspace((unsigned char)linha[i])) {
-            return -1;
-        }
-    }
-
-    if (valor < 0 || valor > 7) {
+    if (opcao < 0 || opcao > 7)
         return -1;
-    }
 
-    return (int)valor;
+    return opcao;
 }
 
 static void menuVeiculos(Veiculo **veiculos, int *total, int *capacidade) {

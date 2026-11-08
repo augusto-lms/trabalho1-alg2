@@ -28,7 +28,7 @@ void consultarVeiculo(const Veiculo *veiculos, int total)
     int codigolido;
 
     printf("Digite o codigo do veiculo que quer consultar: ");
-    if (scanf("%d", &codigolido) != 1)
+    if (!lerInteiro(&codigolido))
     {
         printf("Codigo invalido.\n");
         return;
@@ -56,7 +56,7 @@ void alterarVeiculo(Veiculo *veiculos, int total)
     Veiculo novo;
 
     printf("Digite o codigo do veiculo que quer alterar: ");
-    if (scanf("%d", &codigolido) != 1)
+    if (!lerInteiro(&codigolido))
     {
         printf("Codigo invalido.\n");
         return;
@@ -71,21 +71,21 @@ void alterarVeiculo(Veiculo *veiculos, int total)
             novo = veiculos[i];
 
             printf("Digite o novo modelo: ");
-            if (scanf(" %49[^\n]", novo.modelo) != 1)
+            if (!lerTexto(novo.modelo, sizeof(novo.modelo)))
             {
                 printf("Modelo invalido.\n");
                 return;
             }
 
             printf("Digite o novo ano: ");
-            if (scanf("%d", &novo.ano) != 1 || novo.ano < 1886 || novo.ano > 2027)
+            if (!lerInteiro(&novo.ano) || novo.ano < 1886 || novo.ano > 2027)
             {
                 printf("Ano invalido.\n");
                 return;
             }
 
             printf("Digite o novo preco: ");
-            if (scanf("%f", &novo.preco) != 1 || !(novo.preco >= 0))
+            if (!lerReal(&novo.preco) || !(novo.preco >= 0))
             {
                 printf("Preco invalido.\n");
                 return;
@@ -106,7 +106,7 @@ void removerVeiculo(Veiculo *veiculos, int *total)
     int codigolido;
 
     printf("Digite o codigo do veiculo que quer remover: ");
-    if (scanf("%d", &codigolido) != 1)
+    if (!lerInteiro(&codigolido))
     {
         printf("Codigo invalido.\n");
         return;
@@ -136,7 +136,7 @@ void cadastrarVeiculo(Veiculo **veiculos, int *total, int *capacidade)
     int codigo;
 
     printf("Digite o codigo do veiculo: ");
-    if (scanf("%d", &codigo) != 1)
+    if (!lerInteiro(&codigo))
     {
         printf("Codigo invalido.\n");
         return;
@@ -155,21 +155,21 @@ void cadastrarVeiculo(Veiculo **veiculos, int *total, int *capacidade)
     novo.codigo = codigo;
 
     printf("Digite o modelo: ");
-    if (scanf(" %49[^\n]", novo.modelo) != 1)
+    if (!lerTexto(novo.modelo, sizeof(novo.modelo)))
     {
         printf("Modelo invalido.\n");
         return;
     }
 
     printf("Digite o ano: ");
-    if (scanf("%d", &novo.ano) != 1 || novo.ano < 1886 || novo.ano > 2027)
+    if (!lerInteiro(&novo.ano) || novo.ano < 1886 || novo.ano > 2027)
     {
         printf("Ano invalido.\n");
         return;
     }
 
     printf("Digite o preco:");
-    if (scanf("%f", &novo.preco) != 1 || !(novo.preco >= 0))
+    if (!lerReal(&novo.preco) || !(novo.preco >= 0))
     {
         printf("Preco invalido.\n");
         return;
